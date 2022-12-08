@@ -1,0 +1,21 @@
+-- Site para alteração de arquivos em PDF --
+
+Funções:
+- Alterar ordem das páginas
+- Excluir páginas
+- Incluir páginas
+- Unir arquivos
+- Dividir arquivos
+- Dividir páginas (ao meio ou em uma linha vertical definida pelo usuário)
+
+TODO:
+- Layout (Usar layout do CS50 Finance, alterar cores e alguns itens)
+- User Interface
+- Funções
+- 
+
+DONE:
+- Cadastro
+- Login
+- Logout
+- 

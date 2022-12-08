@@ -2,12 +2,27 @@
 
 #from tempfile import mkdtemp
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, session
-#from flask import flash
+from flask import Flask, redirect, render_template, request, session, url_for
+from flask import flash
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from flask_session import Session
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required
+
+
+# Define list of available functions and their "route"
+FUNCTIONS = [
+    {"href": "/order", "title": "Change Order"},
+    {"href": "/delete", "title": "Delete Pages"},
+    {"href": "/include", "title": "Include Pages"},
+    {"href": "/divide", "title": "Divide Pages"},
+    {"href": "/merge", "title": "Merge Files"},
+    {"href": "/split", "title": "Split Files"},
+    {"href": "/ocr", "title": "Detect Text"}
+]
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = ['pdf']
 
 # Configure application
 app = Flask(__name__)
@@ -15,16 +30,21 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-# Custom filter
-app.jinja_env.filters["usd"] = usd
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+db = SQL("sqlite:///pdf.db")
+
+
+@app.context_processor
+def inject_functions():
+    """ Make variable visible to all templates, without passing it"""
+    return dict(FUNCTIONS=FUNCTIONS)
 
 
 @app.after_request
@@ -36,119 +56,57 @@ def after_request(response):
     return response
 
 
-@app.route("/")
-@login_required
-def index():
-    """Show portfolio of stocks"""
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register new user."""
 
-    # Get user Portfolio
-    user_id = session["user_id"]
-    user_portfolio = db.execute(
-        "SELECT * FROM owned WHERE user_id = ?", user_id)
-    cash_owned = db.execute(
-        "SELECT cash FROM users WHERE id = ?", user_id)[0]["cash"]
+    # Forget any user_id
+    session.clear()
 
-    # Get updated stocks values and calculate total USD value
-    share_value = 0
-    total_owned = 0
-    for item in user_portfolio:
-        # Get the updated price of each symbol
-        price = lookup(item["symbol"])["price"]
-        # Insert price in the Portfolio
-        item["price"] = price
-        # Calculate how much the user total shares are worth for this symbol
-        share_value = price * item["shares"]
-        # Add this worth to portfolio
-        item["total"] = share_value
-        # Update total owned in portfolio
-        total_owned = total_owned + share_value
-
-    total_owned = total_owned + cash_owned
-
-    # Render right template passing the Portfolio
-    return render_template("index.html", user_portfolio=user_portfolio,
-                           cash_owned=cash_owned, total_owned=total_owned)
-
-
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    """Buy shares of stock"""
-
+    # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        # Get symbol information using API
-        info = lookup(request.form.get("symbol"))
-        # Check if info is not None, meaning it's not invalid
-        if not info:
-            return apology("Invalid symbol")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
 
-        # Analize if number of shares typed is an int
-        try:
-            shares = int(request.form.get("shares"))
-        except ValueError:
-            return apology("Shares must be an integer")
+        # Ensure username was submitted
+        if not username:
+            return apology("Must provide username.", 400)
 
-        # Check if number of shares is positive
-        if shares <= 0:
-            return apology("Invalid number of shares")
+        # Ensure username has no special characters
+        # if not username.isalnum():
+        #    return apology("Username can't contain special characters.")
 
-        # Get useful information
-        user_id = session["user_id"]
-        symbol = info["symbol"]
-        name = info["name"]
-        price = float(info["price"])
+        # Ensure password and password confirmation were submitted
+        if not password or not confirmation:
+            return apology("Must provide password and confirmation", 400)
 
-        # Get current amount of cash the user has
-        cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)[
-            0]["cash"]
-        # Calculate the cost of the transaction
-        cost = price * shares
+        # Ensure password confirmation match
+        if not password == confirmation:
+            return apology("Password confirmation must match.", 400)
 
-        # Check if user has enough case
-        if cost > cash:
-            return apology("CAN'T AFFORD")
+        # Query database for typed username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        rows_number = len(rows)
 
-        # Get a list of symbols the user has
-        symbols = db.execute(
-            "SELECT symbol FROM owned WHERE user_id = ?", user_id)
+        # Ensure username does not exist
+        if not rows_number == 0:
+            return apology("This username is taken already.", 400)
 
-        # If the typed symbol is already owned, update quantity of shares
-        if {"symbol": symbol} in symbols:
-            owned_shares = db.execute(
-                "SELECT shares FROM owned WHERE user_id = ? AND symbol = ?",
-                user_id, symbol)[0]["shares"]
-            db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?",
-                       owned_shares + shares, user_id, symbol)
+        # Store username and password into the database
+        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)",
+                   username, generate_password_hash(password))
 
-        # If not, create new entry for that symbol
-        else:
-            db.execute("INSERT INTO owned (user_id, symbol, name, shares) VALUES (?, ?, ?, ?)",
-                       user_id, symbol, name, shares)
+        # Keep registered user logged in
+        rows = db.execute("SELECT * FROM users WHERE username = ?",
+                          request.form.get("username"))
+        session["user_id"] = rows[0]["id"]
 
-        # Update user cash amount
-        db.execute("UPDATE users SET cash = ? WHERE id = ?",
-                   cash - cost, user_id)
-
-        # Update the history inserting the transaction
-        db.execute("INSERT INTO history (user_id, symbol, name, shares, type, time, price) VALUES \
-                  (?, ?, ?, ?, 'buy', CURRENT_TIMESTAMP, ?)", user_id, symbol, name, shares, price)
-
-        # Redirect to main page
+        # Redirect user to home page
         return redirect("/")
 
-    return render_template("buy.html")
-
-
-@app.route("/history")
-@login_required
-def history():
-    """Show history of transactions"""
-
-    # Get user history
-    transactions = db.execute(
-        "SELECT * FROM history WHERE user_id = ?", session["user_id"])
-
-    return render_template("history.html", transactions=transactions)
+    # User reached route via GET (as by clicking a link or via redirect)
+    return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -197,144 +155,82 @@ def logout():
     return redirect("/")
 
 
-@app.route("/quote", methods=["GET", "POST"])
+@app.route("/")
 @login_required
-def quote():
-    """Get stock quote."""
+def index():
+    """Display available functions"""
 
-    if request.method == "POST":
-        info = lookup(request.form.get("symbol"))
-        if not info:
-            return apology("Invalid symbol")
-
-        name = info["name"]
-        price = info["price"]
-        symbol = info["symbol"]
-
-        return render_template("quoted.html", name=name, symbol=symbol, price=price)
-
-    return render_template("quote.html")
+    return apology("TODO")
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    """Register new user."""
-
-    # Forget any user_id
-    session.clear()
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
-
-        # Ensure username was submitted
-        if not username:
-            return apology("Must provide username.", 400)
-
-        # Ensure username has no special characters
-        if not username.isalnum():
-            return apology("Username can't contain special characters.")
-
-        # Ensure password and password confirmation were submitted
-        if not password or not confirmation:
-            return apology("Must provide password and confirmation", 400)
-
-        # Ensure password confirmation match
-        if not password == confirmation:
-            return apology("Password confirmation must match.", 400)
-
-        # Query database for typed username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        rows_number = len(rows)
-
-        # Ensure username does not exist
-        if not rows_number == 0:
-            return apology("This username is taken already.", 400)
-
-        # Store username and password into the database
-        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)",
-                   username, generate_password_hash(password))
-
-        # Keep registered user logged in
-        rows = db.execute("SELECT * FROM users WHERE username = ?",
-                          request.form.get("username"))
-        session["user_id"] = rows[0]["id"]
-
-        # Redirect user to home page
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    return render_template("register.html")
-
-
-@app.route("/sell", methods=["GET", "POST"])
+@app.route("/order", methods=["GET", "POST"])
 @login_required
-def sell():
-    """Sell shares of stock"""
+def order():
+    """Change PDF pages order"""
 
-    # Get user list of symbols
-    user_id = session["user_id"]
-    symbols = db.execute("SELECT symbol FROM owned WHERE user_id = ?", user_id)
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('download_file', name=filename))
+    
+    return render_template("order.html")
 
-    if request.method == "POST":
-        # Check correct input of shares
-        try:
-            shares = int(request.form.get("shares"))
-        except ValueError:
-            return apology("Invalid number of shares")
 
-        # Check if number of shares is positive
-        if shares <= 0:
-            return apology("Invalid number of shares")
 
-        # Check correct input of symbol
-        symbol = request.form.get("symbol")
-        if not symbol:
-            return apology("Invalid symbol")
+@app.route("/delete")
+@login_required
+def delete():
+    """Delete PDF pages"""
 
-        # Check if user has the symbol to sell
-        if {"symbol": symbol} not in symbols:
-            return apology("Must have the stock to sell")
+    return apology("TODO")
 
-        # Check if user has the enough shares to sell
-        owned_shares = db.execute(
-            "SELECT shares FROM owned WHERE user_id = ? AND symbol = ?",
-            user_id, symbol)[0]["shares"]
 
-        if owned_shares < shares:
-            return apology("You don't have that much of shares")
+@app.route("/include", methods=["GET", "POST"])
+@login_required
+def include():
+    """Include PDF pages"""
 
-        # Check updated price of symbol
-        info = lookup(request.form.get("symbol"))
-        if not info:
-            return apology("Can't check stock price now")
+    return apology("TODO")
 
-        # Update user shares/symbols owned
-        if owned_shares - shares > 0:
-            db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?",
-                       owned_shares - shares, user_id, symbol)
-        else:
-            db.execute(
-                "DELETE FROM owned WHERE user_id = ? AND symbol = ?", user_id, symbol)
 
-        # Get current amount of cash the user has
-        cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)[
-            0]["cash"]
-        # Calculate the earning of the transaction
-        price = info["price"]
-        earnings = price * shares
-        # Update user cash amount
-        db.execute("UPDATE users SET cash = ? WHERE id = ?",
-                   cash + earnings, user_id)
+@app.route("/divide", methods=["GET", "POST"])
+@login_required
+def divide():
+    """Cut PDF page into two pages"""
 
-        # Update the history inserting the transaction
-        name = info["name"]
-        db.execute("INSERT INTO history (user_id, symbol, name, shares, type, time, price) VALUES \
-                  (?, ?, ?, ?, 'sell', CURRENT_TIMESTAMP, ?)",
-                   user_id, symbol, name, shares * (-1), price)
+    return apology("TODO")
 
-        return redirect("/")
 
-    return render_template("sell.html", symbols=symbols)
+@app.route("/merge")
+@login_required
+def merge():
+    """Merge two PDF files"""
+
+    return apology("TODO")
+
+
+@app.route("/split", methods=["GET", "POST"])
+@login_required
+def split():
+    """Split PDF files"""
+
+    return apology("TODO")
+
+
+@app.route("/ocr", methods=["GET", "POST"])
+@login_required
+def ocr():
+    """Split PDF files"""
+
+    return apology("TODO")

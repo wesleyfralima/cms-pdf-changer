@@ -1,23 +1,138 @@
-/* Size for brand */
-nav .navbar-brand
-{
-    font-size: xx-large;
+.active-menu-item {
+    color: pink;
+    font-weight: bold;
 }
 
-/* Colors for brand */
-nav .navbar-brand .blue
-{
-    color: #537fbe;
+.active-menu-item:hover {
+    color: pink;
+    font-weight: bold;
 }
-nav .navbar-brand .red
-{
-    color: #ea433b;
+
+.clickable:hover {
+    border-radius: 50%;
+    filter: drop-shadow(0px -5px 10px #000000);
 }
-nav .navbar-brand .yellow
-{
-    color: #f5b82e;
+
+.content {
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
-nav .navbar-brand .green
-{
-    color: #2e944b;
+
+.first-btn {
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
+.frozen-menu {
+    background-color: white;
+    /* offset-x | offset-y | blur-radius | spread-radius | color */
+    box-shadow: 0px 0px 4px 2px gray;
+}
+
+.img-trans {
+    transition: transform 1s;
+}
+
+.img-trans:hover {
+    transform: scale(1.1)
+}
+
+.main-block {
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    height: 87vh;
+    margin-top: 2%;
+    padding-left: 50px;
+    padding-right: 50px;
+    width: 85vw;
+}
+
+.menu-icon {
+    background-color: pink;
+    border-color: #000000;
+    text-decoration: none;
+}
+
+.menu-link {
+    color: gray;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.menu-link:hover {
+    color: black;
+    font-weight: bold;
+}
+
+.normal-text-link {
+    color: black;
+    text-decoration: none;
+}
+
+.normal-text-link:hover {
+    color: gray;
+    text-decoration: none;
+}
+
+.opaque {
+    background-color: rgba(255, 255, 255, .5);
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.social-logo {}
+
+.title-link {
+    color: #AA336A;
+    font-size: large;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.title-link:hover {
+    color: lightpink;
+}
+
+.no-border {
+    border: none;
+}
+
+.img-absolute {
+    padding: 0px;
+}
+
+
+
+.no-border {
+    border-color: pink;
+}
+
+.bar1,
+.bar2,
+.bar3 {
+    align: center;
+    width: 35px;
+    height: 5px;
+    background-color: pink;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+    transform: translate(0, 11px) rotate(-45deg);
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+    opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+    transform: translate(0, -11px) rotate(45deg);
 }
