@@ -1,0 +1,4 @@
+[TYPECHECK]
+generated-members=app.jinja_env.filters
+[MASTER]
+disable=C0114, # missing-module-docstring

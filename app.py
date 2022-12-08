@@ -1,8 +1,9 @@
-import os
+#import os
 
-from tempfile import mkdtemp
+#from tempfile import mkdtemp
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session
+#from flask import flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_session import Session
 
@@ -13,7 +14,6 @@ app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-TEMPLATES_AUTO_RELOAD = True
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
@@ -51,22 +51,23 @@ def index():
     # Get updated stocks values and calculate total USD value
     share_value = 0
     total_owned = 0
-    for i in range(len(user_portfolio)):
+    for item in user_portfolio:
         # Get the updated price of each symbol
-        price = lookup(user_portfolio[i]["symbol"])["price"]
+        price = lookup(item["symbol"])["price"]
         # Insert price in the Portfolio
-        user_portfolio[i]["price"] = price
+        item["price"] = price
         # Calculate how much the user total shares are worth for this symbol
-        share_value = price * user_portfolio[i]["shares"]
+        share_value = price * item["shares"]
         # Add this worth to portfolio
-        user_portfolio[i]["total"] = share_value
+        item["total"] = share_value
         # Update total owned in portfolio
         total_owned = total_owned + share_value
 
     total_owned = total_owned + cash_owned
 
     # Render right template passing the Portfolio
-    return render_template("index.html", user_portfolio=user_portfolio, cash_owned=cash_owned, total_owned=total_owned)
+    return render_template("index.html", user_portfolio=user_portfolio,
+                           cash_owned=cash_owned, total_owned=total_owned)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -84,11 +85,11 @@ def buy():
         # Analize if number of shares typed is an int
         try:
             shares = int(request.form.get("shares"))
-        except:
-            return apology("Invalid number of shares")
+        except ValueError:
+            return apology("Shares must be an integer")
 
         # Check if number of shares is positive
-        if not shares > 0:
+        if shares <= 0:
             return apology("Invalid number of shares")
 
         # Get useful information
@@ -114,7 +115,8 @@ def buy():
         # If the typed symbol is already owned, update quantity of shares
         if {"symbol": symbol} in symbols:
             owned_shares = db.execute(
-                "SELECT shares FROM owned WHERE user_id = ? AND symbol = ?", user_id, symbol)[0]["shares"]
+                "SELECT shares FROM owned WHERE user_id = ? AND symbol = ?",
+                user_id, symbol)[0]["shares"]
             db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?",
                        owned_shares + shares, user_id, symbol)
 
@@ -134,8 +136,7 @@ def buy():
         # Redirect to main page
         return redirect("/")
 
-    else:
-        return render_template("buy.html")
+    return render_template("buy.html")
 
 
 @app.route("/history")
@@ -237,11 +238,11 @@ def register():
             return apology("Username can't contain special characters.")
 
         # Ensure password and password confirmation were submitted
-        elif not password or not confirmation:
+        if not password or not confirmation:
             return apology("Must provide password and confirmation", 400)
 
         # Ensure password confirmation match
-        elif not password == confirmation:
+        if not password == confirmation:
             return apology("Password confirmation must match.", 400)
 
         # Query database for typed username
@@ -281,11 +282,11 @@ def sell():
         # Check correct input of shares
         try:
             shares = int(request.form.get("shares"))
-        except:
+        except ValueError:
             return apology("Invalid number of shares")
 
         # Check if number of shares is positive
-        if not shares > 0:
+        if shares <= 0:
             return apology("Invalid number of shares")
 
         # Check correct input of symbol
@@ -299,7 +300,9 @@ def sell():
 
         # Check if user has the enough shares to sell
         owned_shares = db.execute(
-            "SELECT shares FROM owned WHERE user_id = ? AND symbol = ?", user_id, symbol)[0]["shares"]
+            "SELECT shares FROM owned WHERE user_id = ? AND symbol = ?",
+            user_id, symbol)[0]["shares"]
+
         if owned_shares < shares:
             return apology("You don't have that much of shares")
 
@@ -329,7 +332,8 @@ def sell():
         # Update the history inserting the transaction
         name = info["name"]
         db.execute("INSERT INTO history (user_id, symbol, name, shares, type, time, price) VALUES \
-                  (?, ?, ?, ?, 'sell', CURRENT_TIMESTAMP, ?)", user_id, symbol, name, shares * (-1), price)
+                  (?, ?, ?, ?, 'sell', CURRENT_TIMESTAMP, ?)",
+                   user_id, symbol, name, shares * (-1), price)
 
         return redirect("/")
 
