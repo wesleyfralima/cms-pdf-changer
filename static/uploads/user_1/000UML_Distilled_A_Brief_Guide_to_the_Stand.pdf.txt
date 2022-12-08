@@ -1,14 +1,12 @@
-None
+File title: None                 
 Number of pages: 118
 
-Next Page
 
 1/118  
  
 
 
 
-Next Page
 
 2/118  
 FOREWORD TO THE THIRD EDITION .................................................................................................................................. .4 
@@ -77,7 +75,6 @@ Qualified Associations .........................................................
 CHAPTER 6. OBJEC T DIAGRA MS..................................................................................................................................... . 72 
 
 
-Next Page
 
 3/118 When to Use Object Diagrams ............................................................................................................................... .72 
 CHAPTER 7. PACKAGE DIAGRA MS.................................................................................................................................. . 73 
@@ -143,7 +140,6 @@ BIBLIOGRA PHY...................................................................
  
 
 
-Next Page
 
 4/118 Foreword to the Third Edition 
 Since ancient times, the m ost talented archite cts and the most gifted designers have known the law 
@@ -194,7 +190,6 @@ Chief Technologist, Telelogic
  
 
 
-Next Page
 
 5/118 Foreword to the First Edition 
 When we began to craft the Unified Modeling Language, we hoped that we c ould produce a standard 
@@ -243,7 +238,6 @@ yourself. (Sadly, being smaller doesn't mean propor tionately cheaper; there is 
 producing a quality technical b ook.) 
 
 
-Next Page
 
 6/118 One reas on to have this b ook is to begin to learn ab out the UML. Because this is a short b ook, it will 
 quickly get you up to speed on the essen tials of the UML.  With that  under your belt, you can go int o 
@@ -292,7 +286,6 @@ notati on within the OO world but also a popula r technique in non-OO circles.
  
 
 
-Next Page
 
 7/118 Structure of the Book 
 Chapter 1  gives an introduc tion to the UML: what it is, the different meanings it has to differen t 
@@ -339,7 +332,6 @@ to go into print. I'll post information any further updates on my Web site
 Acknowledgments 
 
 
-Next Page
 
 8/118 Over many years, many people have been part  of the success of this b ook. My first thanks go Carte r 
 Shanklin and Kendall Sco tt. Carter was the editor at Addison-Wesley who suggested  this book to 
@@ -387,7 +379,6 @@ Many people have c ontacted me on the Net and in person w ith suggestions and qu
 point out errors. I haven't been able to keep track of you all, but my thanks are no less sincere . 
 
 
-Next Page
 
 9/118 The people at my favorite technical b ookstore,  SoftPro in Burlington, Massa chusetts, let me spend 
 many hours there l ooking at their stock t o find how people use the UML in prac tice and fed me g ood 
@@ -405,32 +396,27 @@ http://martinfowler.com
  
 
 
-Next Page
 
 10/118 Diagrams 
  
 
 
-Next Page
 
 11/118 
  
 
 
-Next Page
 
 12/118 
  
 
 
-Next Page
 
 13/118 
  
  
 
 
-Next Page
 
 14/118 Chapter 1. Introduction 
 What Is  the UML?  
@@ -469,7 +455,6 @@ thankful for.
 Where to Find Out More 
 
 
-Next Page
 
 15/118 This b ook is not a complete and defi nitive reference t o the UML, let alone OO analysis and design. A 
 lot of words are out there and a lot of worthwhile things t o read. As I discuss the  individual topics, I 
@@ -518,7 +503,6 @@ diagrams shown in b ooks, such as my other books, are sketches. Their emphasis i
 communica tion rather than complete specifica tion. 
 
 
-Next Page
 
 16/118 In contrast, UML as blueprint  is about completeness. In forward engineering, the idea is tha t 
 blueprints are developed by a designer whose job is to bu ild a detailed design for a programmer t o 
@@ -572,7 +556,6 @@ that is  independent of any pa rticular technology. T ools can then turn a PIM  
 Platform Specific Model  (PSM). The PSM is a model of a system targeted to a specifi c 
 
 
-Next Page
 
 17/118 executi on environment. Further t ools then take the PSM and generate code for tha t 
 platform. The PSM c ould be UML but doesn't have to be. 
@@ -625,7 +608,6 @@ study. Here, we aren't talking ab out software elements s o much as we are bu il
 talk ab out a particular domain. 
 
 
-Next Page
 
 18/118 There are n o hard-and-fast rules ab out perspe ctive; as it turns out, there's really quite a large range 
 of usage. S ome tools automatically turn source code int o the UML diagrams, treating the UML as a n 
@@ -674,7 +656,6 @@ that it's not everybody's idea of fun. I talk ab out history here because I  thi
 hard t o understand where the UML is without understanding the  history of how it got here. 
 
 
-Next Page
 
 19/118 In the 1980s, objects began to m ove away fr om the research labs and t ook their first steps toward 
 the "real" world. Smal ltalk stabilized into a plat form that people could use, and C++ was born. A t 
@@ -728,7 +709,6 @@ When people talk about the UML, they credit mainly Grady B ooch, Ivar Jacobson, 
 Rumbaugh as  its creators. They are generally referred to as the Three Amigos, although wags like t o 
 
 
-Next Page
 
 20/118 drop the first sy llable of the second word. A lthough they are m ost credited with  the UML, I  think it 
 somewhat unfair to give them the d ominant cred it. The UML notation was first formed  in the 
@@ -763,7 +743,6 @@ explain it.)
 Figure 1.1. A small piece of the UML meta-model 
 
 
-Next Page
 
 21/118 
  
@@ -790,7 +769,6 @@ drawn on certain diagram types, but this is n ot a prescrip tion.
 Figure 1.2. Classification of UML diagram types 
 
 
-Next Page
 
 22/118 
  
@@ -809,7 +787,6 @@ structure 13 Runtime decomp osition of a class New to UML 2
 Deployment 8 Deployment of artifacts t o nodes In UML 1 
 
 
-Next Page
 
 23/118 Table 1.1. Official Diagram Types of the UML 
 Diagra m Book 
@@ -861,7 +838,6 @@ For something that conforms to the standard, I'll use  the terms standard  or no
 (Normative is the term standards people use t o mean a statement that you must conform to be 
 
 
-Next Page
 
 24/118 valid in  the standard. So non-normative UML i s a fancy way of saying that something is strictly 
 illegal according to the UML standard.) 
@@ -901,7 +877,6 @@ Figure 1.3. An informal screen flow diagram for part of the wiki
 (http: //c2.com/cgi/wi ki) 
 
 
-Next Page
 
 25/118 
  
@@ -929,7 +904,6 @@ If you are starting out, I suggest that y ou concentrate first on the basic form
 sequence diagrams. These are  the most common and, in my view, the m ost useful diagram types. 
 
 
-Next Page
 
 26/118 Once you've g ot the hang of those, you can st art using some of the more advanced class diagram 
 notati on and take a l ook at the other diagrams types. Experiment with  the diagrams and see how 
@@ -975,7 +949,6 @@ do a second iteration so that at the end of 6 months, you'd have a system that d
 functionality. 
 
 
-Next Page
 
 27/118 Of course,  the above is a simplified descrip tion, but it is  the essence of the difference. In prac tice, of 
 course, some impuri ties leak int o the process. 
@@ -1028,7 +1001,6 @@ length of  time. If it appears that you can't build a ll you intended to bu ild 
 must decide to s lip some fun ctionality from  the iteration; you must n ot slip the date of the iteration. 
 
 
-Next Page
 
 28/118 Most pr ojects that use iterative development use the same itera tion length throughout the pr oject; 
 that way, y ou get a regular rhythm of builds. 
@@ -1081,7 +1053,6 @@ system. The ma jority of software pr ojects experience significan t requirements
 requirements in the later stages of the pr oject. These changes shatter the foundations of a 
 
 
-Next Page
 
 29/118 predictive plan. You can combat these changes by freezing  the requirements early on and no t 
 permitting changes, but this runs the risk of delivering a system that n o longer meets the needs of 
@@ -1133,7 +1104,6 @@ project's success is the quality of  the people on the pr oject and how well the
 human terms. Which process  they use and which t ools they use are stri ctly sec ond-order effec ts. 
 
 
-Next Page
 
 30/118 Agile methods tend t o use short, time-boxed itera tions, most often of a m onth or less. Becaus e they 
 don't a ttach much weight to d ocuments, ag ile approaches disdain using the UML in blueprint mode. 
@@ -1182,7 +1152,6 @@ depends on many factors: the kind of system you're building, the te chnology you
 and distribu tion of the team,  the nature of the risks, the consequences of failure, the working style s 
 
 
-Next Page
 
 31/118 of the team, and the culture of the organiza tion. As a resu lt, you should never expect there to be a 
 one-size-fits-all pr ocess that will work for all pr ojects. 
@@ -1233,7 +1202,6 @@ Patterns are important because they are  the next stage beyond understanding the
 of a language or a modeling te chnique. Patter ns give you a series of solutions and als o 
 
 
-Next Page
 
 32/118 show you what makes a go od model and how you go ab out constructing a model. Pattern s 
 teach by example. 
@@ -1281,7 +1249,6 @@ software effort want the system to do. A num ber of UML techniques can come in h
 up a rigor ous vocabulary of the domain. 
 
 
-Next Page
 
 33/118 • An activity diagram, which can show the work f low of the organization, showing how s oftware 
 and human activi ties interact. An activity diagram can show the c ontext for use cases and 
@@ -1332,7 +1299,6 @@ exactly right, they sh ould feel free to change the design. The implementors hav
 judgment as to whether the change needs a wider discussion t o understand the f ull ramifications. 
 
 
-Next Page
 
 34/118 One of my concerns with blueprints is my own observa tion that it's very hard to get them right , 
 even for a g ood designer. I often find that my own designs d o not survive c ontact with coding intact. 
@@ -1381,7 +1347,6 @@ informa tion as you learn about it. Sketches of key classes in a package and the
 can help clarify what's going on. 
 
 
-Next Page
 
 35/118 With modern t ools, you can generate deta iled diagrams for key parts of a system. Don't use  these 
 tools to generate big paper reports; instead, use them to drill int o key areas as you are exploring 
@@ -1424,7 +1389,6 @@ less often. Therefore, I've broken my discussion of class diagrams int o two par
 chapter) and  the advanced ( Chapter  5). 
 
 
-Next Page
 
 36/118 A class diagram  describes the types of object s in the system and the various kinds of static 
 relationships that exist among  them. Class dia grams also show the proper ties and opera tions of a 
@@ -1448,7 +1412,6 @@ of an attribute is:
  
 
 
-Next Page
 
 37/118 visibility name: type multiplicity = default {property-string} 
 An example of this is: 
@@ -1481,7 +1444,6 @@ class. The name of the property goes at the target end of the ass ociation, toge
 multiplicity. The target end of the ass ociation links to the class that is the type of the property. 
 
 
-Next Page
 
 38/118 Although m ost of the same information appear s in both notati ons, some items are different. I n 
 particular, associations can show mu ltiplicities at b oth ends of the line. 
@@ -1527,7 +1489,6 @@ More generally, m ultiplicities are de fined with a lower bound and an upper bou
 players of a game of canasta. The lower b ound may be any p ositive number or zero; the upper is 
 
 
-Next Page
 
 39/118 any p ositive number or * (for  unlimited). If the lower and upper b ounds are  the same, you can use 
 one number; hence, 1 is equivalent t o 1..1. Because  it's a common case, * is short for 0..*. 
@@ -1575,7 +1536,6 @@ Using private fields is a very implementation-f ocused interpretati on of the di
 interface-oriented interpretati on might  instead concentrate on the getting methods rather  than the 
 
 
-Next Page
 
 40/118 underlying data. In  this case, we might see th e Order Line's attributes corresponding to the 
 following methods: 
@@ -1632,7 +1592,6 @@ UML and code, yet  there is a similarity. Within a pr oject team, team conven ti
 correspondence. 
 
 
-Next Page
 
 41/118 Whether a property is implemented as a field or as a calculated value,  it represents some thing an 
 object can always provide. You sh ouldn't use a property t o model a transient rela tionship, such as 
@@ -1673,7 +1632,6 @@ lines t o implement a bidirectional associa tion:
 class Car... 
 
 
-Next Page
 
 42/118   public Person Owner { 
     get {return _owner;} 
@@ -1727,7 +1685,6 @@ direction name: type = default value
 If no direc tion is shown, it's assumed to b e in. 
 
 
-Next Page
 
 43/118 An example operati on on acc ount might be: 
  
@@ -1777,7 +1734,6 @@ work fine. Essentially,  this means that if I wr ite code assuming I have a Cust
 any subtype of Customer. The Corporate Customer may resp ond to certain commands differe ntly 
 
 
-Next Page
 
 44/118 from an other Customer, using polymorphism, but the caller should not need to worry ab out the 
 difference. (For more on  this, see the Lisk ov Substitution Principle (LSP) in [Martin].) 
@@ -1819,7 +1775,6 @@ Figure 3.7  shows some dependencies that you might find in a multilayered applic
 Window class—a user interface, or presentati on class—is dependent on the Employee class: a 
 
 
-Next Page
 
 45/118 domain object  that captures the essen tial behavior of the system—in  this case, business rules. This 
 means that if  the empl oyee class changes  its interface,  the Benef its Window may have to change. 
@@ -1861,7 +1816,6 @@ the source might be a design class and the target the corresponding analysis cla
 «trace»  Used t o track such things as requirements to classes or how changes in one mode l 
 
 
-Next Page
 
 46/118 Table 3.1. Selected Dependency Keywords 
 Keyword Meaning 
@@ -1909,7 +1863,6 @@ programming language.
 At the heart of Design by Contract is the asser tion. An assertion  is a B oolean statemen t 
 
 
-Next Page
 
 47/118 that sh ould never be false and,  therefore, w ill be false only because of a bug. Typically, 
 asser tions are checked only during debug and are n ot checked during production 
@@ -1960,7 +1913,6 @@ could fa il when applied to the subclass.
 Chapter 4. Sequence Diagrams 
 
 
-Next Page
 
 48/118 Interaction diagra ms describe how groups of  objects co llaborate  in some behavior. The UML 
 defines several forms of interac tion diagram, of which  the most c ommon is  the sequence diagram. 
@@ -1990,7 +1942,6 @@ they were in UML 1. But in UML 2, their roles are much more complicated, and to 
 is beyond this b ook. So I use the term participants , a word that isn't used formally in the UM L 
 
 
-Next Page
 
 49/118 spec. In UML 1, par ticipants were objects and so their names were underlined, but in UML 2, they 
 should be shown with out the under line, as I'v e done here. 
@@ -2028,7 +1979,6 @@ participants there to supply data. Figure 4.2  uses distributed control , in whi
 split among many participants, each one d oing a l ittle bit of the algorithm. 
 
 
-Next Page
 
 50/118 Both styles have their strengths and weaknesses. Most people, particularly those new to objects, are 
 more used to centra lized control. In many ways, it's simpler, as all the proces sing is in one place; 
@@ -2058,7 +2008,6 @@ activati on right after the participant box.
 Figure 4.3. Creation and deletion of participants 
 
 
-Next Page
 
 51/118 
  
@@ -2079,7 +2028,6 @@ on the f ollowing pseudocode:
 Figure 4.4. Interaction frames 
 
 
-Next Page
 
 52/118 
  
@@ -2106,7 +2054,6 @@ conventi ons. Figure 4 .5 shows some of these u nofficial tweaks.
 Figure 4.5. Older conventions for control logic 
 
 
-Next Page
 
 53/118 
  
@@ -2139,7 +2086,6 @@ pseudomessage , with the l oop condi tion or the guard on a variati on of the se
 Figure 4.5 , I've shown this with out a message arrow; some people include a message arrow, bu t 
 
 
-Next Page
 
 54/118 leaving it out helps reinforce  that this isn't a real ca ll. Some also like to gray shade th e 
 pseud omessage's activation bar. If you have a lterative behavior, you can show that with a n 
@@ -2187,7 +2133,6 @@ Other useful forms of interaction diagrams are communication diagrams, for showi
 and timing diagrams, for showing ti ming constraints. 
 
 
-Next Page
 
 55/118 CRC Cards 
 One of the m ost valuable tec hniques in c oming up with a g ood OO design is to explor e 
@@ -2226,7 +2171,6 @@ But d oing so misses the p oint. The resp onsibilities sh ould easily fit on one
 yourself whether  the class sh ould be split or whether the responsib ilities would be bette r 
 
 
-Next Page
 
 56/118 stated by r olling them up into higher-level statements. 
 Many people stress the importance of role play ing, whereby each person on the team 
@@ -2271,7 +2215,6 @@ In UML 1, the guillemets were used ma inly for stereotyp es. In UML 2, stere oty
 tightly, and describing what is and isn't a stereotype is beyond the scope of this b ook. However , 
 
 
-Next Page
 
 57/118 because of UML 1, many people use the ter m stereotype  to mean the same a s keyword , although 
 that is n o longer correct. 
@@ -2317,7 +2260,6 @@ have many supertypes but that a single type must be de fined for each object. M 
 allows multiple types for an object without defi ning a specific type for  the purpose. 
 
 
-Next Page
 
 58/118 For example, consider a person subtyped as e ither man or woman, d octor or nurse, patient or  not 
 (see Figure 5. 11). Multiple classification a llows an object t o have any of these types assigned t o it in 
@@ -2352,7 +2294,6 @@ Association classes  allow you to add attributes, operations, and other features
 shown in Figure 5. 12. We can see fr om the diagram that a person may a ttend many meetings. We 
 
 
-Next Page
 
 59/118 need to keep informa tion ab out how awake that pers on was; we can d o this by adding the attribut e 
 attentiveness t o the ass ociation. 
@@ -2373,7 +2314,6 @@ Figure 5. 14. Association class subtleties (Role should probably not be an
 association class) 
 
 
-Next Page
 
 60/118 
  
@@ -2401,7 +2341,6 @@ If I have  this kind of temporal  information, I use a «temporal»  keyword on 
 Figure 5.16 ). The model indicates that a Pers on may work for only a single Company at one t ime. 
 
 
-Next Page
 
 61/118 Over time, however, a Person may work for s everal Companies. This suggests an interface al ong the 
 lines of: 
@@ -2439,7 +2378,6 @@ deriva tion in two ways. The first way mirrors the C++ syntax (see Figure 5. 18)
 deriva tion expression within angle brackets  in the for m <parameter-name::parameter-value> . If 
 
 
-Next Page
 
 62/118 there's only one parameter, c onventional use often omits the parameter name. The a lternative 
 notati on (see Figure 5.19 ) reinforces the link t o the template and allows you to rename the b ound 
@@ -2462,7 +2400,6 @@ other than their symbolic value. They are shown as the class with the «enumerat
 Figure 5. 20. Enumeration 
 
 
-Next Page
 
 63/118 
  
@@ -2496,7 +2433,6 @@ looking at a UML model from elsewhere, be wary of the meanings of  the visibilit
 aware of how those meanings can change from  language to language. 
 
 
-Next Page
 
 64/118 Most of the time, I don't draw visibi lity markers in diagrams; I use them only if I need t o highligh t 
 the differences  in visib ility of certain features. Even then, I can m ostly get away w ith + and –, which 
@@ -2520,7 +2456,6 @@ the compa rtment, if you wish, but I usually don't, as  there's rarely any poten
 Figure 5.1. Showing responsibilities in a class diagram 
 
 
-Next Page
 
 65/118 
  
@@ -2545,7 +2480,6 @@ Figure 5.3. Aggregation
  
 
 
-Next Page
 
 66/118 As well as aggregation, the UML has the more defined property of composition . In Figure 5 .4, an 
 instance of P oint may be part of a polyg on or may be the center of a circle, but it cannot be b oth. 
@@ -2584,7 +2518,6 @@ unnecessary, but it's useful to help re mind people of the constraint. This usag
 with conceptual diagrams. 
 
 
-Next Page
 
 67/118 Deriva tion can also be applied to properties us ing association nota tion. In  this case, you simpl y 
 mark the name with a /. 
@@ -2614,7 +2547,6 @@ that in order t o use those  three methods, as they are all part of the List int
 Figure 5.6. A Java example of interfaces and an abstract class 
 
 
-Next Page
 
 68/118 
  
@@ -2645,7 +2577,6 @@ socket icon. The c onnection is nicely obvious.
 Figure 5.7. Ball-and-socket notation 
 
 
-Next Page
 
 69/118 
  
@@ -2667,7 +2598,6 @@ interface. (You can do the same trick with c ommunication diagrams.)
 Figure 5.9. Using a lollipop to show polymorphism in a sequence diagram 
 
 
-Next Page
 
 70/118 
  
@@ -2698,7 +2628,6 @@ same object in the real world. For example, it is normal to have hundreds of obj
 1-Jan-04. These are all interchangeable copies. New dates are created and destroyed frequently. 
 
 
-Next Page
 
 71/118 If you have two dates and wish to see whether they are the same, you don't l ook at their identities 
 but rather at the values they represent. This usually means  that you have to write an equality tes t 
@@ -2743,7 +2672,6 @@ In conceptual modeling, I use  the qualifier c onstruct only to show constraints
  
 
 
-Next Page
 
 72/118 Chapter 6. Object Diagrams 
 An object diagram  is a snapshot of the objects in a system at a p oint in time. Because it show s 
@@ -2768,7 +2696,6 @@ messages.
 When to Use Object Diagrams 
 
 
-Next Page
 
 73/118 Object diagrams are use ful for showing examples of objects connected together.  In many situa tions, 
 you can define a structure precisely with a class diagram, but the structure is still difficult t o 
@@ -2801,7 +2728,6 @@ sense when all you want to d o is indicate which classes are in which packages.
 Figure 7.1. Ways of showing packages on diagrams 
 
 
-Next Page
 
 74/118 
  
@@ -2835,7 +2761,6 @@ easier to begin with  the unstereotyped dependency and use the more particular d
 I need to, which I hardly ever do. 
 
 
-Next Page
 
 75/118 In a medium t o large system, plot ting a package diagram can be one of the most valuable t hings 
 you can d o to control the large-scale structure of the system. Ideally, this diagram should be 
@@ -2865,7 +2790,6 @@ ripple through t o the leasing presenta tion. (It ripples only if  the leasing d
 interface.) 
 
 
-Next Page
 
 76/118 Some packages are used in so many places  that it w ould be a mess to draw all the dependency  lines 
 to them. In this case, a conventi on is to use a  keyword, such as «global» , on the package. 
@@ -2894,7 +2818,6 @@ an implementation. In pra ctice, this would mean that  the database gateway pack
 interfaces and abstract classes that are fully implemented by the other packages. 
 
 
-Next Page
 
 77/118 Figure 7.4. A package implemented by other packages 
  
@@ -2912,7 +2835,6 @@ Figure 7.5. Defining a required interface in a client package
 When to Use Package Diagrams 
 
 
-Next Page
 
 78/118 I find package diagrams extremely useful on larger-scale systems to get a picture of  the 
 dependencies between ma jor elements of a sy stem. These diagrams correspond well to c ommon 
@@ -2937,7 +2859,6 @@ Figure 8.1. Example deployment diagram
  
 
 
-Next Page
 
 79/118 The nodes c ontain artifacts , which are  the ph ysical manifestati ons of software: usually, files. These 
 files might be executables (such as .exe files, binaries, DLLs, JAR files, assemblies, or scripts), or 
@@ -2983,7 +2904,6 @@ In use case–speak, the users are referred to as actors. A n actor  is a role t
 respect to the system. Actors might include cu stomer, customer service rep, sales manager, an d 
 
 
-Next Page
 
 80/118 product analyst. Actors carry out use cases. A single actor may perform many use cases; 
 conversely, a use case may have several actors performing it. Usually, you have many customers, 
@@ -3018,7 +2938,6 @@ describe the user interface in the use case. Indeed, writing  the use case usual
 the user  interface. 
 
 
-Next Page
 
 81/118 An extension w ithin the use case names a condi tion that results in different interactions from t hose 
 described in the main success scenari o (MSS) and states what those differences are. Start th e 
@@ -3061,7 +2980,6 @@ content of  the use cases.
 Figure 9.2. Use case diagram 
 
 
-Next Page
 
 82/118 
  
@@ -3097,7 +3015,6 @@ Many approaches use features of a system—E xtreme Program ming calls them user
 describe requirements. A common ques tion is how features and use cases interrelate. 
 
 
-Next Page
 
 83/118 Features are a g ood way of c hunking up a system for plan ning an iterative pr oject, whereby e ach 
 iteration delivers a  number of features. Use cases pr ovide a narrative of how the actors use  the 
@@ -3142,7 +3059,6 @@ Whenever people write about state machines, the examples are ine vitably c ruise
 machines. As I'm a little bored w ith them, I de cided to use a controller for a secret panel in a Gothic 
 
 
-Next Page
 
 84/118 castle. In this castle, I want to keep my valuables in a safe that's hard to find. S o to reveal the lock 
 to the safe, I have t o remove a strategic candle from its holder, but this will reveal  the lock only 
@@ -3179,7 +3095,6 @@ object. Thus, if someone should be so careless as t o fall for my trap, the c on
 terminates, s o I would need to put the rabbit in its cage, mop the fl oor, and reb oot the system. 
 
 
-Next Page
 
 85/118 Remember that state machines can show only what the object dire ctly observes or activates. S o 
 although you might expect me to add or remove things fr om the safe when it's open, I don't pu t 
@@ -3213,7 +3128,6 @@ state.
 Figure 10.3. A state with an activit y 
 
 
-Next Page
 
 86/118 
  
@@ -3238,7 +3152,6 @@ shows a pathe tically simple alarm cl ock that can play e ither CDs or the radio
 current time or the alarm time. 
 
 
-Next Page
 
 87/118 Figure 10.5. Concurrent orthogonal states 
  
@@ -3269,7 +3182,6 @@ public void HandleEvent (PanelEvent anEvent) {
     case PanelState.Wait : 
 
 
-Next Page
 
 88/118       switch (anEvent) { 
         case PanelEvent.CandleRemoved : 
@@ -3312,7 +3224,6 @@ Obviously, the state table is more work to do once, but  then y ou can use  it e
 state problem t o hold. A runtime state table can also be modified with out recomp ilation, which  in 
 
 
-Next Page
 
 89/118 some contexts is quite handy. The state pa ttern is easier to put together when y ou need it, and 
 although it needs a new class for each state,  it's a small amount of code to wr ite in each case. 
@@ -3356,7 +3267,6 @@ Activity diagrams have seen some of the biggest changes over the versi ons of th
 have, n ot surprisingly, been significantly extended and altered again for UML 2. In UML 1, activity 
 
 
-Next Page
 
 90/118 diagrams were seen as special cases of state diagrams. This caused a l ot of problems for peopl e 
 modeling work flows, which activity diagrams are well suited for. In UML 2, that tie was removed. 
@@ -3373,7 +3283,6 @@ I can also d o these actions by interleaving. I grab the first line item from st
 grab the second line item, put the inv oice in a n envelope, and s o forth. Or, I c ould do some of this 
 
 
-Next Page
 
 91/118 simultaneously: type up  the invoice w ith one hand while I reach into my stores with an other. Any of 
 these sequences is correct, according t o the diagram. 
@@ -3409,7 +3318,6 @@ it as its own activity ( Figure 11 .2). Then I can  call it as an acti on (Figur
 Figure 11.2. A subsidiary activity diagram 
 
 
-Next Page
 
 92/118 
  
@@ -3418,7 +3326,6 @@ Figure 11.2
  
 
 
-Next Page
 
 93/118 Actions can be implemented either as subactivi ties or as methods on classes. You can show a 
 subactivity by using the rake symbol. You can show a call on a method with s yntax class-
@@ -3462,7 +3369,6 @@ Activity diagrams tell you what happens, but they do not tell you who does what.
 this means  that the diagram does n ot convey which class is responsible for each ac tion. In bu siness 
 
 
-Next Page
 
 94/118 process mode ling, this does not convey which part of an organizati on carries out which action.  This 
 isn't necessarily a problem; often, it makes sense to concentrate on what gets done rather tha n on 
@@ -3482,7 +3388,6 @@ In the simple example of Figure 11 .1, activity diagrams have a clearly defined 
 corresponds to an invoca tion of a program or routine. Actions can also respond to signals. 
 
 
-Next Page
 
 95/118 A time signal  occurs because of  the passage of time.  Such signals might indicate  the end of a 
 month  in a financial period or each microsecond in a real-time controller. 
@@ -3509,7 +3414,6 @@ consump tion. The  initial node creates a token, which  then passes t o the next
 and then passes the token t o the next. At a fork, one token c omes in, and the fork produces a token 
 
 
-Next Page
 
 96/118 on each of its outward flows. Conversely, on a join, as each inbound t oken arrives, nothing happen s 
 until all the tokens appear at  the join; then a token is produced on the outward flow. 
@@ -3540,7 +3444,6 @@ When you're drawing an acti vity diagram strictly, you have t o ensure that the 
 an outbound action match the input parameters  of another. If they don't match, you can  indicate a 
 
 
-Next Page
 
 97/118 transformati on (Figure 11 .8) to get from one to another. The transforma tion must be an 
 expressi on that's free of side effects: essentially, a query on the output pin quary that supplie s an 
@@ -3567,7 +3470,6 @@ list that's passed to Pub lish Newsletter.
 Figure 11.9. Expansion region 
 
 
-Next Page
 
 98/118 
  
@@ -3593,7 +3495,6 @@ collection is smaller  than the  input co llection.
 Figure 11. 11. Flow finals in an activit y 
 
 
-Next Page
 
 99/118 
  
@@ -3613,7 +3514,6 @@ Figure 11. 12. Join specification
  
 
 
-Next Page
 
 100/118 Chapter 12. Communication Diagrams 
 Communication diagra ms, a kind of interac tion diagram, emphasize  the data links between the 
@@ -3638,7 +3538,6 @@ UML. To be kosher UML, y ou have to use a nested decimal numbering scheme, as in
 Figure 12.2. Communication diagram with nested decimal numbering 
 
 
-Next Page
 
 101/118 
  
@@ -3675,7 +3574,6 @@ Figure 13.1  shows a TV Viewer class with its provided and required interfaces (
 this in two ways: u sing the ball-and-socket nota tion and listing  them internally. 
 
 
-Next Page
 
 102/118 Figure 13.1. Two ways of showing a TV viewer and its interfaces 
  
@@ -3688,7 +3586,6 @@ Rumbaugh)
  
 
 
-Next Page
 
 103/118 You can show how many instances of a part are present. Figure 13 .2 says that each TV Viewer 
 contains one generator part and one controls part. 
@@ -3721,7 +3618,6 @@ keyword.
 Figure 14.1. Notation for components 
 
 
-Next Page
 
 104/118 
  
@@ -3754,7 +3650,6 @@ upgradeable. As a re sult, dividing a system  into components is as much a marke
 a technical decision, for which [H ohmann] is an exce llent guide. It's also a reminder to beware of 
 
 
-Next Page
 
 105/118 overly fine-grained comp onents, because t oo many components are hard to manage, especiall y 
 when versioning rears its ugly head, hence "DLL he ll." 
@@ -3778,7 +3673,6 @@ Figure 15.1. A collaboration with its class diagram of roles
 Figure 15.2. A sequence diagram for the auction collaboration 
 
 
-Next Page
 
 106/118 
  
@@ -3797,7 +3691,6 @@ collabora tion.
 Figure 15.3. A collaboration occurrence 
 
 
-Next Page
 
 107/118 
  
@@ -3817,7 +3710,6 @@ Intera ction overview diagrams are a grafting together of activity diagrams and 
 You can  think of interaction overview diagrams either as activity diagrams in which the ac tivities are 
 
 
-Next Page
 
 108/118 replaced by little sequence diagrams, or as a sequence diagram br oken up with acti vity diagr am 
 notati on used to show c ontrol flow. Either way,  they make a bit of an odd mixture. 
@@ -3837,7 +3729,6 @@ Either draw an ac tivity diagram or use a sequence diagram, depending on what be
 purpose. 
 
 
-Next Page
 
 109/118  
 Chapter 17. Timing Diagrams 
@@ -3862,7 +3753,6 @@ Figure 17.1. Timing diagram showing states as lines
 Figure 17.2. Timing diagram showing states as areas 
 
 
-Next Page
 
 110/118 
  
@@ -3893,7 +3783,6 @@ version 1.1 of the UML. This was adopted by the OMG toward  the end of 1997. How
 darkest obfusca tion, the OMG called this standard versi on 1.0. So, now the UML was b oth OMG 
 
 
-Next Page
 
 111/118 version 1.0 and Rational version 1.1, n ot to be confused with Ra tional 1.0. In practice, everyon e 
 calls that standard versi on 1.1. 
@@ -3938,7 +3827,6 @@ printings. Thanks t o the readers wh o have poi nted these out to me.
  
 
 
-Next Page
 
 112/118 Changes from UML 1.0 to 1.1 
 Type and  Implementation Class 
@@ -3984,7 +3872,6 @@ subtle and easy t o miss. UML 1.1 uses a dashed arrow for a return, which please
 returns much more obvious. (As I used dashed returns in Analysis Pa tterns [Fowler, AP],  it also 
 
 
-Next Page
 
 113/118 makes me l ook influen tial.) You can name what is returned for later use by using the form 
 enoughStock := check() . 
@@ -4034,7 +3921,6 @@ conditional behavior, it is increa singly c ommon style to show them s o that yo
 conditional behavior. 
 
 
-Next Page
 
 114/118 The synchr onization bar is now referred to as a fork—when splitting c ontrol—or as a join—when 
 synchronizing control together. However, you can no longer add arb itrary conditions to joins. Also, 
@@ -4079,7 +3965,6 @@ Within the UML,  there have been deep change s to the UML meta-model.  Although 
 don't affect the discussi on in UML Dis tilled, they are very important to s ome groups. 
 
 
-Next Page
 
 115/118 One of the m ost obvious changes is  the introd uction of new diagram types. Object diagrams an d 
 package diagrams were widely drawn before but weren't official diagram types; now they are. UML 2 
@@ -4126,7 +4011,6 @@ Swim lanes can now be m ultidimensional and are generally called par titions.
  
 
 
-Next Page
 
 116/118 Bibliograph y 
 [Amble r] Scott Ambler, Agile Modeling , Wiley, 2002. 
@@ -4165,7 +4049,6 @@ http://martinfowler.com/articles/continuousIntegration.ht ml
 Addison-Wesley,  1999. 
 
 
-Next Page
 
 117/118 [Gang of Fou r] Erich Gamma, Richard Helm, Ralph J ohnson, and J ohn Vlissides, Design Patterns: 
 Elements of Reusable Object-Oriented S oftware , Addison-Wesley, 1995. 
@@ -4204,11 +4087,11 @@ Modeling th e World  in Data, Yourd on Press, 1989.
 World in States . Yourdon Press, 1991. 
 
 
-Next Page
 
 118/118 [Warmer and Kleppe]  Jos Warmer and Anneke Kleppe, The Object Constraint Language: Precise 
 Modeling with UML , Addison-Wesley, 1998. 
 [Wirfs-Brock]  Rebecca Wirfs-Brock and Alan McKean, Object Design: R oles Responsibilities an d 
 Collaborati ons. Prentice-Ha ll, 2003. 
+
 
 

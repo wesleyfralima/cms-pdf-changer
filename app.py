@@ -6,7 +6,7 @@ from flask import Flask, redirect, render_template, request, session, send_file,
 from flask import flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 from flask_session import Session
 from shutil import rmtree
 
@@ -171,71 +171,60 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/download')
-def download_file(output_file_path):
-    """ Downloads a file"""
-    file_handle = open(output_file_path, mode='r', encoding='UTF-8')
-    @after_this_request
-    def remove_file(output_file_path):
-        try:
-            os.system('rmdir /S /Q "{}"'.format(output_file_path))
-            file_handle.close()
-        except Exception as error:
-            raise Exception("Error removing or closing downloaded file handle", error) from error
-        return redirect("/extract")
-    return send_file(output_file_path)
-
-
 @app.route("/extract", methods=["GET", "POST"])
 @login_required
 def extract():
-    """Change PDF pages order"""
+    """Extract PDF text to .txt file"""
 
     if request.method == 'POST':
-        # Get user id
-        user_id = "user_" + str(session["user_id"]) + "/"
-
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            return redirect(request.url)
-
+        # Set user folder
+        user_dir = "user_" + str(session["user_id"]) + "/"
+        # Set file name
         file = request.files['file']
+        # Set folder to save the out .txt file
+        dir_to = UPLOAD_FOLDER + user_dir
 
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            return redirect(request.url)
+        # check if the user select a any file
+        if not file:
+            return apology("must select file")
 
-        if file and allowed_file(file.filename):
-            os.mkdir(UPLOAD_FOLDER + user_id)
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
 
-            filename = secure_filename(file.filename)
-            uploaded_file = UPLOAD_FOLDER + user_id + filename
+        # Create user folder if not present
+        if not os.path.isdir(dir_to):
+            os.mkdir(dir_to)
 
-            #uploaded_file = os.path.join(UPLOAD_FOLDER, filename)
+        # Make sure there's no maliciuos file name
+        filename = secure_filename(file.filename)
+        # Full path to save aploaded .pdf
+        uploaded_file = dir_to + filename
+        # Save uploaded file into disk
+        file.save(uploaded_file)
 
-            flash(uploaded_file)
-            file.save(uploaded_file)
+        # Create instance of PDF Reader
+        pdf_reader = PdfReader(uploaded_file)
 
-        pdf_reader = PdfFileReader(uploaded_file)
+        # Create file for output .txt file
+        output_file = dir_to + filename + ".txt"
 
-        output_file_path = UPLOAD_FOLDER + user_id + filename + ".txt"
-
-        with open(output_file_path, mode="w", encoding='UTF-8') as output_file:
-            title = pdf_reader.documentInfo.title
-            num_pages = pdf_reader.getNumPages()
-            output_file.write(f"{title}\nNumber of pages: {num_pages}\n\n")
+        # Perform .PDF "conversion"
+        with open(output_file, mode="w", encoding='UTF-8') as out:
+            out.write(f"File title: {pdf_reader.documentInfo.title} \
+                \nNumber of pages: {pdf_reader.getNumPages()}\n\n\n")
 
             for page in pdf_reader.pages:
-                text = page.extractText()
-                output_file.write("Next Page\n\n")
-                output_file.write(text)
-                output_file.write("\n\n\n")
+                text = page.extractText() + "\n\n\n\n"
+                out.write(text)
 
-        return download_file(UPLOAD_FOLDER + user_id)
+        # Remove uploaded .pdf file
+        os.remove(uploaded_file)
+        # Let user download .txt file
+        return send_file(output_file, as_attachment=True)
 
+    # If page was reached via GET
     return render_template("extract.html")
-
 
 
 @app.route("/delete")
