@@ -1,5 +1,4 @@
-/flask_session
-/__pycache__
+flask_session/
 finance.db
 
 # Byte-compiled / optimized / DLL files
