@@ -1,19 +1,21 @@
-#import os
+import os
 
 #from tempfile import mkdtemp
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, send_file, after_this_request
 from flask import flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+from PyPDF2 import PdfFileReader
 from flask_session import Session
+from shutil import rmtree
 
 from helpers import apology, login_required
 
 
 # Define list of available functions and their "route"
 FUNCTIONS = [
-    {"href": "/order", "title": "Change Order"},
+    {"href": "/extract", "title": "Extract Text"},
     {"href": "/delete", "title": "Delete Pages"},
     {"href": "/include", "title": "Include Pages"},
     {"href": "/divide", "title": "Divide Pages"},
@@ -21,7 +23,7 @@ FUNCTIONS = [
     {"href": "/split", "title": "Split Files"},
     {"href": "/ocr", "title": "Detect Text"}
 ]
-UPLOAD_FOLDER = '/path/to/the/uploads'
+UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = ['pdf']
 
 # Configure application
@@ -163,28 +165,76 @@ def index():
     return apology("TODO")
 
 
-@app.route("/order", methods=["GET", "POST"])
+def allowed_file(filename):
+    """ Check if file extension is allowed."""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/download')
+def download_file(output_file_path):
+    """ Downloads a file"""
+    file_handle = open(output_file_path, mode='r', encoding='UTF-8')
+    @after_this_request
+    def remove_file(output_file_path):
+        try:
+            os.system('rmdir /S /Q "{}"'.format(output_file_path))
+            file_handle.close()
+        except Exception as error:
+            raise Exception("Error removing or closing downloaded file handle", error) from error
+        return redirect("/extract")
+    return send_file(output_file_path)
+
+
+@app.route("/extract", methods=["GET", "POST"])
 @login_required
-def order():
+def extract():
     """Change PDF pages order"""
 
     if request.method == 'POST':
+        # Get user id
+        user_id = "user_" + str(session["user_id"]) + "/"
+
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
             return redirect(request.url)
+
         file = request.files['file']
+
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            flash('No selected file')
             return redirect(request.url)
+
         if file and allowed_file(file.filename):
+            os.mkdir(UPLOAD_FOLDER + user_id)
+
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('download_file', name=filename))
-    
-    return render_template("order.html")
+            uploaded_file = UPLOAD_FOLDER + user_id + filename
+
+            #uploaded_file = os.path.join(UPLOAD_FOLDER, filename)
+
+            flash(uploaded_file)
+            file.save(uploaded_file)
+
+        pdf_reader = PdfFileReader(uploaded_file)
+
+        output_file_path = UPLOAD_FOLDER + user_id + filename + ".txt"
+
+        with open(output_file_path, mode="w", encoding='UTF-8') as output_file:
+            title = pdf_reader.documentInfo.title
+            num_pages = pdf_reader.getNumPages()
+            output_file.write(f"{title}\nNumber of pages: {num_pages}\n\n")
+
+            for page in pdf_reader.pages:
+                text = page.extractText()
+                output_file.write("Next Page\n\n")
+                output_file.write(text)
+                output_file.write("\n\n\n")
+
+        return download_file(UPLOAD_FOLDER + user_id)
+
+    return render_template("extract.html")
 
 
 
