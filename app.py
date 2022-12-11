@@ -6,7 +6,7 @@ from flask import Flask, redirect, render_template, request, session, send_file,
 from flask import flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from PyPDF2 import PdfReader
+from PyPDF2 import PdfReader, PdfWriter
 from flask_session import Session
 from shutil import rmtree
 
@@ -17,7 +17,7 @@ from helpers import apology, login_required
 FUNCTIONS = [
     {"href": "/extract", "title": "Extract Text"},
     {"href": "/delete", "title": "Delete Pages"},
-    {"href": "/include", "title": "Include Pages"},
+    {"href": "/include", "title": "Include Blank Pages"},
     {"href": "/divide", "title": "Divide Pages"},
     {"href": "/merge", "title": "Merge Files"},
     {"href": "/split", "title": "Split Files"},
@@ -177,8 +177,37 @@ def index():
 
 def allowed_file(filename):
     """ Check if file extension is allowed."""
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def check_file(out_extension):
+    """ Get user and file info, setting uder folder, and check some usage"""
+
+    # Set file name
+    file = request.files['file']
+    # Set user folder
+    user_dir = "user_" + str(session["user_id"]) + "/"
+    # Set folder to save the out .txt file
+    dir_to = UPLOAD_FOLDER + user_dir
+
+    # Create user folder if not present
+    if not os.path.isdir(dir_to):
+        os.mkdir(dir_to)
+
+    # Make sure there's no maliciuos file name
+    filename = secure_filename(file.filename)
+    # Full path to save aploaded .pdf
+    uploaded_file = dir_to + filename
+    # Save uploaded file into disk
+    file.save(uploaded_file)
+
+    # Create instance of PDF Reader
+    pdf_reader = PdfReader(uploaded_file)
+
+    # Create file for output .txt file
+    output_file = dir_to + filename + out_extension
+
+    return pdf_reader, output_file
 
 
 @app.route("/extract", methods=["GET", "POST"])
@@ -187,14 +216,10 @@ def extract():
     """Extract PDF text to .txt file"""
 
     if request.method == 'POST':
-        # Set user folder
-        user_dir = "user_" + str(session["user_id"]) + "/"
         # Set file name
         file = request.files['file']
-        # Set folder to save the out .txt file
-        dir_to = UPLOAD_FOLDER + user_dir
 
-        # check if the user select a any file
+        # check if the user selected any file
         if not file:
             return apology("must select file")
 
@@ -202,22 +227,7 @@ def extract():
         if not allowed_file(file.filename):
             return apology("this is not a .pdf file")
 
-        # Create user folder if not present
-        if not os.path.isdir(dir_to):
-            os.mkdir(dir_to)
-
-        # Make sure there's no maliciuos file name
-        filename = secure_filename(file.filename)
-        # Full path to save aploaded .pdf
-        uploaded_file = dir_to + filename
-        # Save uploaded file into disk
-        file.save(uploaded_file)
-
-        # Create instance of PDF Reader
-        pdf_reader = PdfReader(uploaded_file)
-
-        # Create file for output .txt file
-        output_file = dir_to + filename + ".txt"
+        pdf_reader, output_file = check_file(".txt")
 
         # Perform .PDF "conversion"
         with open(output_file, mode="w", encoding='UTF-8') as out:
@@ -235,18 +245,71 @@ def extract():
     return render_template("extract.html")
 
 
-@app.route("/delete")
+@app.route("/delete", methods=["GET", "POST"])
 @login_required
 def delete():
     """Delete PDF pages"""
 
-    return apology("TODO")
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set file name
+        file = request.files['file']
+
+        # check if the user selected any file
+        if not file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
+    
+        # Check file type and return output_filename and PdfReader instance
+        pdf_reader, output_file = check_file(".pdf")
+
+        # Try to parse start and end to an integer
+        try:
+            start_page = int(request.form.get("start"))
+            end_page = int(request.form.get("end"))
+        # Render error page if not possible
+        except (TypeError, ValueError):
+            return apology("Start and End must be integers")
+
+        # Get number of pages in original file
+        pages_in_file = pdf_reader.getNumPages()
+        # Get a range of pages to be deleted
+        pages_range = range(start_page, end_page)
+
+        # Check if start and end page interval is valid for the file
+        if start_page < 1 or end_page > pages_in_file:
+            return apology("This page interval is invalid for this file")
+
+        # Create new PdfWriter instance
+        pdf_writer = PdfWriter()
+
+        # Go through every page in original file
+        for i in range(1, pages_in_file):
+            # Skip pages to be deleted
+            if i in pages_range:
+                continue
+            # If page should not be deleted, add it to new file
+            page = pdf_reader.getPage(i)
+            pdf_writer.addPage(page)
+
+        # Create the new .pdf file
+        pdf_writer.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("delete.html")
 
 
 @app.route("/include", methods=["GET", "POST"])
 @login_required
 def include():
-    """Include PDF pages"""
+    """Include blank PDF pages"""
 
     return apology("TODO")
 

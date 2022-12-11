@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Include
+{% endblock %}
+
+{% block main %}
+
+<form action="/include" enctype="multipart/form-data" method="post">
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" name="file" type="file" value="file">
+        <br>
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="start" name="start"
+            placeholder="Start" type="number">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="end" name="end"
+            placeholder="End" type="number">
+    </div>
+    <button class="btn btn-primary" type="submit">Upload</button>
+</form>
+
+{% endblock %}
