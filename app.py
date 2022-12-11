@@ -278,7 +278,7 @@ def delete():
         # Get number of pages in original file
         pages_in_file = pdf_reader.getNumPages()
         # Get a range of pages to be deleted
-        pages_range = range(start_page, end_page)
+        pages_range = range(start_page - 1, end_page)
 
         # Check if start and end page interval is valid for the file
         if start_page < 1 or end_page > pages_in_file:
@@ -288,7 +288,7 @@ def delete():
         pdf_writer = PdfWriter()
 
         # Go through every page in original file
-        for i in range(1, pages_in_file):
+        for i in range(pages_in_file):
             # Skip pages to be deleted
             if i in pages_range:
                 continue
@@ -311,7 +311,64 @@ def delete():
 def include():
     """Include blank PDF pages"""
 
-    return apology("TODO")
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set file name
+        file = request.files['file']
+
+        # check if the user selected any file
+        if not file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename and PdfReader instance
+        pdf_reader, output_file = check_file(".pdf")
+
+        # Try to parse start and end to an integer
+        try:
+            start_page = int(request.form.get("start"))
+            end_page = int(request.form.get("end"))
+        # Render error page if not possible
+        except (TypeError, ValueError):
+            return apology("Start and End must be integers")
+
+        # Get number of pages in original file
+        pages_in_file = pdf_reader.getNumPages()
+        # Get a range of pages to be deleted
+        pages_range = range(start_page - 1, end_page)
+
+        # Check if start and end page interval is valid for the file
+        if start_page < 1 or end_page > pages_in_file:
+            return apology("This page interval is invalid for this file")
+
+        # Create new PdfWriter instance
+        pdf_writer = PdfWriter()
+
+        file_dimensions = pdf_reader.pages[0].mediaBox
+        #blank_page = pdf_writer.addBlankPage(file_dimensions[2], file_dimensions[3])
+
+        # Go through every page in original file
+        for i in range(pages_in_file):
+            # Add normal page to new file
+            page = pdf_reader.getPage(i)
+            pdf_writer.addPage(page)
+
+            # Add blank page
+            if i in pages_range:
+                pdf_writer.addBlankPage(file_dimensions[2], file_dimensions[3])
+
+        # Create the new .pdf file
+        pdf_writer.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("include.html")
 
 
 @app.route("/divide", methods=["GET", "POST"])
