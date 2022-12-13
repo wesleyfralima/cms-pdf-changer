@@ -1,4 +1,4 @@
-import os
+import os, copy
 
 #from tempfile import mkdtemp
 from cs50 import SQL
@@ -376,10 +376,61 @@ def include():
 def divide():
     """Cut PDF page into two pages"""
 
-    return apology("TODO")
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set file name
+        file = request.files['file']
+
+        # check if the user selected any file
+        if not file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename and PdfReader instance
+        pdf_reader, output_file = check_file(".pdf")
+
+        # Get number of pages in original file
+        pages_in_file = pdf_reader.getNumPages()
+
+        # Create new PdfWriter instance
+        pdf_writer = PdfWriter()
+
+        # Go through every page in original file
+        for i in range(pages_in_file):
+            # Get original page's info
+            page = pdf_reader.getPage(i)
+            current_coords = page.mediaBox.upperRight
+
+            # Make two copys of page
+            left_side = copy.deepcopy(page)
+            right_side = copy.deepcopy(page)
+
+            # Update coords of page
+            new_coords = (current_coords[0] / 2, current_coords[1])
+
+            # Set the two new pages
+            left_side.mediaBox.upperRight = new_coords
+            right_side.mediaBox.upperLeft = new_coords
+
+            # Add both left and right portions of page
+            pdf_writer.addPage(left_side)
+            pdf_writer.addPage(right_side)
+
+        # Create the new .pdf file
+        pdf_writer.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("divide.html")
 
 
-@app.route("/merge")
+@app.route("/merge", methods=["GET", "POST"])
 @login_required
 def merge():
     """Merge two PDF files"""
