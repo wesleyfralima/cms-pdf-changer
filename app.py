@@ -54,7 +54,7 @@ Session(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///pdf.db")
+db = SQL("sqlite:////pdf.db")
 
 
 @app.context_processor
