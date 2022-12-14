@@ -48,8 +48,10 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure session
 app.config["SESSION_PERMANENT"] = False
+app.config['SESSION_TYPE'] = 'memcached'
+app.config["SECRET_KEY"] = os.urandom(12)
+
 Session(app)
-app.secret_key = os.urandom(12)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
