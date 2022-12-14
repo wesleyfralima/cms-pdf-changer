@@ -42,10 +42,13 @@ ALLOWED_EXTENSIONS = ['pdf']
 
 # Configure application
 app = Flask(__name__)
-app.secret_key = os.urandom(12)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# Configure session
+app.config["SESSION_PERMANENT"] = False
+Session(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -79,6 +82,9 @@ def index():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register new user."""
+
+    # Forget any user_id
+    session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -129,6 +135,9 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
+
+    # Forget any user_id
+    session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
