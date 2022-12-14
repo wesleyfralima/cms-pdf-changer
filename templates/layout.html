@@ -96,8 +96,12 @@
     </header>
     {% endif %}
 
+    <div class="container main-block">
+        {% block explanation %}{% endblock %}
+    </div>
+    
     <main class="container content main-block">
-        {% block main %}{% endblock %}
+        {% block main %}{% endblock %}        
     </main>
 
     {% block footer %}

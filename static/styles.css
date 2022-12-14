@@ -1,11 +1,34 @@
 .active-menu-item {
-    color: pink;
+    color: #FF6699;
     font-weight: bold;
 }
 
 .active-menu-item:hover {
-    color: pink;
+    color: #FF6699;
     font-weight: bold;
+}
+
+.btn-custom {
+    background-color: #FF6699; 
+    border-color: #FF6699;
+    color: white;
+    font-weight:bold; 
+}
+
+.btn-custom:hover {
+    background-color: lightpink; 
+    border-color: lightpink;
+    color: white;
+    font-weight:bold; 
+}
+
+.card-custom {
+    transition: transform .2s;
+}
+
+.card-custom:hover {
+    transform: scale(1.03);
+    background-color: #fff3f4;
 }
 
 .clickable:hover {
@@ -39,20 +62,15 @@
 }
 
 .main-block {
-    align-items: center;
     background-color: #f8f9fa;
-    border-radius: 50%;
-    display: flex;
+    border-radius: 0%;
     justify-content: center;
-    height: 87vh;
-    margin-top: 2%;
-    padding-left: 50px;
-    padding-right: 50px;
-    width: 85vw;
+    height: auto;
+    margin-top: 5%;
 }
 
 .menu-icon {
-    background-color: pink;
+    background-color: #FF6699;
     border-color: #000000;
     text-decoration: none;
 }
@@ -87,7 +105,7 @@
 .social-logo {}
 
 .title-link {
-    color: #AA336A;
+    color: #FF6699;
     font-size: large;
     font-weight: bold;
     text-decoration: none;
@@ -108,7 +126,7 @@
 
 
 .no-border {
-    border-color: pink;
+    border-color: #FF6699;
 }
 
 .bar1,
@@ -117,7 +135,7 @@
     align: center;
     width: 35px;
     height: 5px;
-    background-color: pink;
+    background-color: #FF6699;
     margin: 6px 0;
     transition: 0.4s;
 }

@@ -1,27 +1,41 @@
-import os, copy
+# pylint: disable=no-member
 
-#from tempfile import mkdtemp
+import os
+import copy
+
+from shutil import rmtree
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, session, send_file, after_this_request
-from flask import flash
+from flask import Flask, redirect, render_template, request, session, send_file
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from PyPDF2 import PdfReader, PdfWriter
+from PyPDF2 import PdfReader, PdfWriter, PdfMerger
 from flask_session import Session
-from shutil import rmtree
 
 from helpers import apology, login_required
 
 
 # Define list of available functions and their "route"
 FUNCTIONS = [
-    {"href": "/extract", "title": "Extract Text"},
-    {"href": "/delete", "title": "Delete Pages"},
-    {"href": "/include", "title": "Include Blank Pages"},
-    {"href": "/divide", "title": "Divide Pages"},
-    {"href": "/merge", "title": "Merge Files"},
-    {"href": "/split", "title": "Split Files"},
-    {"href": "/ocr", "title": "Detect Text"}
+    {"href": "/extract", "title": "Extract Text",
+    "explanation": "Use this function to extract text from a PDF file and save it to a TXT file."},
+
+    {"href": "/delete", "title": "Delete Pages",
+    "explanation": "Use this function to delete a range of pages from a PDF file."},
+
+    {"href": "/include", "title": "Include Pages",
+    "explanation": "Use this function to include some blank pages to a PDF file."},
+
+    {"href": "/divide", "title": "Divide Pages",
+    "explanation": "Use this function to crop a PDF file with two columns. Save with one column."},
+
+    {"href": "/merge", "title": "Merge Files",
+    "explanation": "Use this function to merge two PDF file into a single PDF file."},
+
+    {"href": "/split", "title": "Extract Pages",
+    "explanation": "Use this function to extract a range of pages from a PDF file."},
+
+    #{"href": "/ocr", "title": "Detect Text",
+    #"explanation": "Use this function to extract text from a PDF file and save it to a TXT file."},
 ]
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = ['pdf']
@@ -172,7 +186,7 @@ def logout():
 def index():
     """Display available functions"""
 
-    return apology("TODO")
+    return render_template("index.html")
 
 
 def allowed_file(filename):
@@ -196,7 +210,7 @@ def check_file(out_extension):
 
     # Make sure there's no maliciuos file name
     filename = secure_filename(file.filename)
-    # Full path to save aploaded .pdf
+    # Full path to save uploaded .pdf
     uploaded_file = dir_to + filename
     # Save uploaded file into disk
     file.save(uploaded_file)
@@ -205,7 +219,7 @@ def check_file(out_extension):
     pdf_reader = PdfReader(uploaded_file)
 
     # Create file for output .txt file
-    output_file = dir_to + filename + out_extension
+    output_file = dir_to + filename.replace(".pdf", "") + out_extension
 
     return pdf_reader, output_file
 
@@ -263,7 +277,7 @@ def delete():
         # check if the user select a .pdf file
         if not allowed_file(file.filename):
             return apology("this is not a .pdf file")
-    
+
         # Check file type and return output_filename and PdfReader instance
         pdf_reader, output_file = check_file(".pdf")
 
@@ -435,7 +449,60 @@ def divide():
 def merge():
     """Merge two PDF files"""
 
-    return apology("TODO")
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set files names
+        first_file = request.files['first-file']
+        second_file = request.files['second-file']
+
+        # check if the user selected any file
+        if not first_file or not second_file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(first_file.filename) or not allowed_file(second_file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename
+        # Set user folder
+        user_dir = "user_" + str(session["user_id"]) + "/"
+        # Set folder to save the out .txt file
+        dir_to = UPLOAD_FOLDER + user_dir
+        # Create user folder if not present
+        if not os.path.isdir(dir_to):
+            os.mkdir(dir_to)
+        # Make sure there's no maliciuos file name
+        first_filename = secure_filename(first_file.filename)
+        second_filename = secure_filename(second_file.filename)
+        # Full path to save uploaded .pdf
+        first_uploaded_file = dir_to + first_filename
+        second_uploaded_file = dir_to + second_filename
+        # Save uploaded file into disk
+        first_file.save(first_uploaded_file)
+        second_file.save(second_uploaded_file)
+
+        # Create file for output .txt file
+        output_file = dir_to + first_filename.replace(".pdf", "") + " -merged with- " + \
+            second_filename.replace(".pdf", "") + ".pdf"
+
+        # Create a list with both files
+        files = [first_uploaded_file, second_uploaded_file]
+
+        # Create new PdfWriter instance
+        pdf_merger = PdfMerger()
+
+        for file in files:
+            pdf_merger.append(file)
+
+        # Create the new .pdf file
+        pdf_merger.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("merge.html")
 
 
 @app.route("/split", methods=["GET", "POST"])
@@ -443,12 +510,62 @@ def merge():
 def split():
     """Split PDF files"""
 
-    return apology("TODO")
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set file name
+        file = request.files['file']
+
+        # check if the user selected any file
+        if not file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename and PdfReader instance
+        pdf_reader, output_file = check_file(".pdf")
+
+        # Try to parse start and end to an integer
+        try:
+            start_page = int(request.form.get("start"))
+            end_page = int(request.form.get("end"))
+        # Render error page if not possible
+        except (TypeError, ValueError):
+            return apology("Start and End must be integers")
+
+        # Get number of pages in original file
+        pages_in_file = pdf_reader.getNumPages()
+        # Get a range of pages to be deleted
+        pages_range = range(start_page - 1, end_page)
+
+        # Check if start and end page interval is valid for the file
+        if start_page < 1 or end_page > pages_in_file:
+            return apology("This page interval is invalid for this file")
+
+        # Create new PdfWriter instance
+        pdf_writer = PdfWriter()
+
+        # Go through every page in original file
+        for i in range(pages_in_file):
+            if i in pages_range:
+                page = pdf_reader.getPage(i)
+                pdf_writer.addPage(page)
+
+        # Create the new .pdf file
+        pdf_writer.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("split.html")
 
 
 @app.route("/ocr", methods=["GET", "POST"])
 @login_required
 def ocr():
-    """Split PDF files"""
+    """Detect text in PDF files"""
 
     return apology("TODO")
