@@ -75,7 +75,7 @@ def after_request(response):
 
 
 @app.route("/")
-#@login_required
+@login_required
 def index():
     """Display available functions"""
 
@@ -227,7 +227,7 @@ def check_file(out_extension):
 
 
 @app.route("/extract", methods=["GET", "POST"])
-#@login_required
+@login_required
 def extract():
     """Extract PDF text to .txt file"""
 
