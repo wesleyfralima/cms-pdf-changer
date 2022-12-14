@@ -44,11 +44,11 @@ ALLOWED_EXTENSIONS = ['pdf']
 app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
-#app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure session
 app.config["SESSION_PERMANENT"] = False
-#app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config["SECRET_KEY"] = os.urandom(12)
 
 Session(app)
@@ -75,7 +75,7 @@ def after_request(response):
 
 
 @app.route("/")
-@login_required
+#@login_required
 def index():
     """Display available functions"""
 
@@ -227,7 +227,7 @@ def check_file(out_extension):
 
 
 @app.route("/extract", methods=["GET", "POST"])
-@login_required
+#@login_required
 def extract():
     """Extract PDF text to .txt file"""
 
