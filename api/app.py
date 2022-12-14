@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader, PdfWriter, PdfMerger
 from flask_session import Session
 
-from api.helpers import apology, login_required
+from helpers import apology, login_required
 
 
 # Define list of available functions and their "route"
