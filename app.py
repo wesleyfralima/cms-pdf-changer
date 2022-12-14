@@ -72,6 +72,14 @@ def after_request(response):
     return response
 
 
+@app.route("/")
+@login_required
+def index():
+    """Display available functions"""
+
+    return "<div> teste </div>"
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register new user."""
@@ -179,14 +187,6 @@ def logout():
     session.clear()
     # Redirect user to login form
     return redirect("/")
-
-
-@app.route("/")
-@login_required
-def index():
-    """Display available functions"""
-
-    return render_template("index.html")
 
 
 def allowed_file(filename):
