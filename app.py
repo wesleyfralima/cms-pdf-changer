@@ -23,7 +23,19 @@ FUNCTIONS = [
     "explanation": "Use this function to delete a range of pages from a PDF file."},
 
     {"href": "/include", "title": "Include Pages",
-    "explanation": "Use this function to include some blank pages to a PDF file."}
+    "explanation": "Use this function to include some blank pages to a PDF file."},
+
+    {"href": "/divide", "title": "Divide Pages",
+    "explanation": "Use this function to crop a PDF file with two columns. Save with one column."},
+
+    {"href": "/merge", "title": "Merge Files",
+    "explanation": "Use this function to merge two PDF file into a single PDF file."},
+
+    {"href": "/split", "title": "Extract Pages",
+    "explanation": "Use this function to extract a range of pages from a PDF file."},
+
+    #{"href": "/ocr", "title": "Detect Text",
+    #"explanation": "Use this function to extract text from a PDF file and save it to a TXT file."},
 ]
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = ['pdf']
@@ -371,3 +383,189 @@ def include():
 
     # If user got into page via GET request
     return render_template("include.html")
+
+
+@app.route("/divide", methods=["GET", "POST"])
+@login_required
+def divide():
+    """Cut PDF page into two pages"""
+
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set file name
+        file = request.files['file']
+
+        # check if the user selected any file
+        if not file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename and PdfReader instance
+        pdf_reader, output_file = check_file(".pdf")
+
+        # Get number of pages in original file
+        pages_in_file = pdf_reader.getNumPages()
+
+        # Create new PdfWriter instance
+        pdf_writer = PdfWriter()
+
+        # Go through every page in original file
+        for i in range(pages_in_file):
+            # Get original page's info
+            page = pdf_reader.getPage(i)
+            current_coords = page.mediaBox.upperRight
+
+            # Make two copys of page
+            left_side = copy.deepcopy(page)
+            right_side = copy.deepcopy(page)
+
+            # Update coords of page
+            new_coords = (current_coords[0] / 2, current_coords[1])
+
+            # Set the two new pages
+            left_side.mediaBox.upperRight = new_coords
+            right_side.mediaBox.upperLeft = new_coords
+
+            # Add both left and right portions of page
+            pdf_writer.addPage(left_side)
+            pdf_writer.addPage(right_side)
+
+        # Create the new .pdf file
+        pdf_writer.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("divide.html")
+
+
+@app.route("/merge", methods=["GET", "POST"])
+@login_required
+def merge():
+    """Merge two PDF files"""
+
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set files names
+        first_file = request.files['first-file']
+        second_file = request.files['second-file']
+
+        # check if the user selected any file
+        if not first_file or not second_file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(first_file.filename) or not allowed_file(second_file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename
+        # Set user folder
+        user_dir = "user_" + str(session["user_id"]) + "/"
+        # Set folder to save the out .txt file
+        dir_to = UPLOAD_FOLDER + user_dir
+        # Create user folder if not present
+        if not os.path.isdir(dir_to):
+            os.mkdir(dir_to)
+        # Make sure there's no maliciuos file name
+        first_filename = secure_filename(first_file.filename)
+        second_filename = secure_filename(second_file.filename)
+        # Full path to save uploaded .pdf
+        first_uploaded_file = dir_to + first_filename
+        second_uploaded_file = dir_to + second_filename
+        # Save uploaded file into disk
+        first_file.save(first_uploaded_file)
+        second_file.save(second_uploaded_file)
+
+        # Create file for output .txt file
+        output_file = dir_to + first_filename.replace(".pdf", "") + " -merged with- " + \
+            second_filename.replace(".pdf", "") + ".pdf"
+
+        # Create a list with both files
+        files = [first_uploaded_file, second_uploaded_file]
+
+        # Create new PdfWriter instance
+        pdf_merger = PdfMerger()
+
+        for file in files:
+            pdf_merger.append(file)
+
+        # Create the new .pdf file
+        pdf_merger.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("merge.html")
+
+
+@app.route("/split", methods=["GET", "POST"])
+@login_required
+def split():
+    """Split PDF files"""
+
+    # If user got into page via POST request
+    if request.method == "POST":
+
+        # Set file name
+        file = request.files['file']
+
+        # check if the user selected any file
+        if not file:
+            return apology("must select file")
+
+        # check if the user select a .pdf file
+        if not allowed_file(file.filename):
+            return apology("this is not a .pdf file")
+
+        # Check file type and return output_filename and PdfReader instance
+        pdf_reader, output_file = check_file(".pdf")
+
+        # Try to parse start and end to an integer
+        try:
+            start_page = int(request.form.get("start"))
+            end_page = int(request.form.get("end"))
+        # Render error page if not possible
+        except (TypeError, ValueError):
+            return apology("Start and End must be integers")
+
+        # Get number of pages in original file
+        pages_in_file = pdf_reader.getNumPages()
+        # Get a range of pages to be deleted
+        pages_range = range(start_page - 1, end_page)
+
+        # Check if start and end page interval is valid for the file
+        if start_page < 1 or end_page > pages_in_file:
+            return apology("This page interval is invalid for this file")
+
+        # Create new PdfWriter instance
+        pdf_writer = PdfWriter()
+
+        # Go through every page in original file
+        for i in range(pages_in_file):
+            if i in pages_range:
+                page = pdf_reader.getPage(i)
+                pdf_writer.addPage(page)
+
+        # Create the new .pdf file
+        pdf_writer.write(output_file)
+
+        # Let user download the generated file
+        return send_file(output_file, as_attachment=True)
+
+    # If user got into page via GET request
+    return render_template("split.html")
+
+
+@app.route("/ocr", methods=["GET", "POST"])
+@login_required
+def ocr():
+    """Detect text in PDF files"""
+
+    return apology("TODO")
