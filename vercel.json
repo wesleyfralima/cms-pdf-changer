@@ -1,21 +1,15 @@
 {
     "version": 2,
-    
+    "builds": [
+        {
+            "src": "./app.py",
+            "use": "@vercel/python"
+        }
+    ],
     "routes": [
         {
             "src": "/(.*)",
             "dest": "/"
         }
-    ],
-
-    "functions": {
-        "api/test.js": {
-          "memory": 1024,
-          "maxDuration": 10
-        },
-        "api/*.js": {
-          "memory": 1024,
-          "maxDuration": 10
-        }
-      }
+    ]
 }
