@@ -42,7 +42,6 @@ ALLOWED_EXTENSIONS = ['pdf']
 
 # Configure application
 app = Flask(__name__)
-app.secret_key = os.urandom(12)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -50,6 +49,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Configure session
 app.config["SESSION_PERMANENT"] = False
 Session(app)
+app.secret_key = os.urandom(12)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
