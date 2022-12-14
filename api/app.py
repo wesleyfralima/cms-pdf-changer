@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader, PdfWriter, PdfMerger
 from flask_session import Session
 
-from helpers import apology, login_required
+from api.helpers import apology, login_required
 
 
 # Define list of available functions and their "route"
@@ -77,7 +77,7 @@ def after_request(response):
 def index():
     """Display available functions"""
 
-    return "<div> teste </div>"
+    return render_template("index.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -569,3 +569,6 @@ def ocr():
     """Detect text in PDF files"""
 
     return apology("TODO")
+
+if __name__ == '__main__':
+    app.run(debug=True)
