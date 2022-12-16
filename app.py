@@ -5,7 +5,7 @@ import copy
 
 from shutil import rmtree
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, session, send_file
+from flask import Flask, redirect, render_template, request, session, send_file, after_this_request
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader, PdfWriter, PdfMerger
@@ -62,6 +62,7 @@ db = SQL("sqlite:///pdf.db")
 @app.context_processor
 def inject_functions():
     """ Make variable visible to all templates, without passing it"""
+
     return dict(FUNCTIONS=FUNCTIONS)
 
 
@@ -77,6 +78,12 @@ def after_request(response):
 @app.route("/")
 def index():
     """Display home and available functions"""
+
+    # Delete every file in folder 'uploads'
+    @after_this_request
+    def delete(response):
+        delete_all_files()
+        return response
 
     return render_template("index.html")
 
@@ -178,6 +185,14 @@ def delete_user_files():
             rmtree(user_dir)
 
 
+def delete_all_files():
+    """ Delete every file in 'uploads' folder"""
+    
+    rmtree(UPLOAD_FOLDER)
+    # Recreate 'uploads' folder
+    os.mkdir(UPLOAD_FOLDER)
+    
+
 @app.route("/logout")
 def logout():
     """Log user out"""
@@ -257,6 +272,7 @@ def extract():
         return send_file(output_file, as_attachment=True)
 
     # If page was reached via GET
+    delete_user_files()
     return render_template("extract.html")
 
 
@@ -318,6 +334,7 @@ def delete():
         return send_file(output_file, as_attachment=True)
 
     # If user got into page via GET request
+    delete_user_files()
     return render_template("delete.html")
 
 
@@ -383,6 +400,7 @@ def include():
         return send_file(output_file, as_attachment=True)
 
     # If user got into page via GET request
+    delete_user_files()
     return render_template("include.html")
 
 
@@ -442,6 +460,7 @@ def divide():
         return send_file(output_file, as_attachment=True)
 
     # If user got into page via GET request
+    delete_user_files()
     return render_template("divide.html")
 
 
@@ -503,6 +522,7 @@ def merge():
         return send_file(output_file, as_attachment=True)
 
     # If user got into page via GET request
+    delete_user_files()
     return render_template("merge.html")
 
 
@@ -561,6 +581,7 @@ def split():
         return send_file(output_file, as_attachment=True)
 
     # If user got into page via GET request
+    delete_user_files()
     return render_template("split.html")
 
 
@@ -568,7 +589,8 @@ def split():
 @login_required
 def ocr():
     """Detect text in PDF files"""
-
+    
+    delete_user_files()
     return apology("TODO")
 
 if __name__ == '__main__':
