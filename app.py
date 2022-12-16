@@ -75,9 +75,8 @@ def after_request(response):
 
 
 @app.route("/")
-@login_required
 def index():
-    """Display available functions"""
+    """Display home and available functions"""
 
     return render_template("index.html")
 
