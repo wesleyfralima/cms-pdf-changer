@@ -4,18 +4,25 @@
     Include Blank Pages
 {% endblock %}
 
+{% block explanation %}
+    <!-- Function/Page Title -->
+    <a class="normal-text-link" href="/"><h1><b>Include Pages in PDF</b></h1></a>
+    <!-- Function/Page Description -->
+    <p>
+        <br><h5>Use this to include a blank page after a normal page in a file. Type 1 in start and 4 in end to add a blank page after pages 1, 2, 3, and 4.</h5>
+    </p>
+{% endblock %}
+
 {% block main %}
-
-<form action="/include" enctype="multipart/form-data" method="post">
-    <div class="mb-3">
-        <input class="form-control mx-auto w-auto" name="file" type="file" value="file">
-        <br>
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="start" name="start"
-            placeholder="Start" type="number">
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="end" name="end"
-            placeholder="End" type="number">
-    </div>
-    <button class="btn btn-primary" type="submit">Upload</button>
-</form>
-
+    <form action="/include" enctype="multipart/form-data" method="post">
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="file" type="file" value="file">
+            <br>
+            <input autocomplete="off" autofocus class="form-control mb-1 mx-auto w-auto" id="start" name="start"
+                placeholder="Start" type="number">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="end" name="end"
+                placeholder="End" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">Upload</button>
+    </form>
 {% endblock %}

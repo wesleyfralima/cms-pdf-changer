@@ -4,6 +4,15 @@
     Extract Text
 {% endblock %}
 
+{% block explanation %}
+    <!-- Function/Page Title -->
+    <a class="normal-text-link" href="/"><h1><b>Extract Text From Files</b></h1></a>
+    <!-- Function/Page Description -->
+    <p>
+        <br><h5>Use this to extract the text present in the file. Save the extracted text to a .txt file. Note: it does not detect text using OCR.</h5>
+    </p>
+{% endblock %}
+
 {% block main %}
 <form action="/extract" enctype="multipart/form-data" method="post">
     <div class="mb-3">

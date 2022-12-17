@@ -4,15 +4,24 @@
     Split Files
 {% endblock %}
 
+{% block explanation %}
+    <!-- Function/Page Title -->
+    <a class="normal-text-link" href="/"><h1><b>Extract Pages from PDF</b></h1></a>
+    <!-- Function/Page Description -->
+    <p>
+        <br><h5>Use this to extract a range of pages from a file. Only pages 10 through 20 matters? Type 10 in start and 20 in end and give it a go!</h5>
+    </p>
+{% endblock %}
+
 {% block main %}
 
 <form action="/split" enctype="multipart/form-data" method="post">
     <div class="mb-3">
         <input class="form-control mx-auto w-auto" name="file" type="file" value="file">
         <br>
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="start" name="start"
+        <input autocomplete="off" autofocus class="form-control mb-1 mx-auto w-auto" id="start" name="start"
             placeholder="Start" type="number">
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="end" name="end"
+        <input autocomplete="off" class="form-control mx-auto w-auto" id="end" name="end"
             placeholder="End" type="number">
     </div>
     <button class="btn btn-primary" type="submit">Upload</button>

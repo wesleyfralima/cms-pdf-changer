@@ -4,13 +4,21 @@
     Merge Files
 {% endblock %}
 
+{% block explanation %}
+    <!-- Function/Page Title -->
+    <a class="normal-text-link" href="/"><h1><b>Combine Two PDF files</b></h1></a>
+    <!-- Function/Page Description -->
+    <p>
+        <br><h5>Use this to combine two .pdf files into a new file. The second file will be added immediately after the first one.</h5>
+    </p>
+{% endblock %}
+
 {% block main %}
 
     <form action="/merge" enctype="multipart/form-data" method="post">
         <div class="mb-3">
             <b>First File</b>
-            <input class="form-control mx-auto w-auto" name="first-file" type="file" value="first-file">
-            <br>
+            <input class="form-control mb-3 mx-auto w-auto" name="first-file" type="file" value="first-file">
             <b>Second File</b>
             <input class="form-control mx-auto w-auto" name="second-file" type="file" value="second-file">
         </div>
