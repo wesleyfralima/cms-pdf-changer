@@ -16,8 +16,8 @@
 {% block main %}
 <form action="/extract" enctype="multipart/form-data" method="post">
     <div class="mb-3">
-        <input class="form-control mx-auto w-auto" name="file" type="file" value="file">
+        <input accept=".pdf" class="form-control mx-auto w-auto" name="file" type="file" value="file">
     </div>
-    <button class="btn btn-primary" type="submit">Upload</button>
+    <button class="btn btn-custom btn-primary" type="submit">Upload</button>
 </form>
 {% endblock %}
